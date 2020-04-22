@@ -11,6 +11,15 @@ app.post('/api/suggest', (req, res) => {
 	}
 	})
 
+app.post('/api/suggest2', (req, res) => {
+	console.log(`Parameters: ${req.query.q}`)
+	if (req.query.q === null ) {
+        	res.send('Invalid query')
+	} else {
+         res.send(suggestions)
+	}
+	})
+
 // Catch routes with no functionality
 app.use(function (req, res, next) {
         res.status(404).send('Please POST to /api/suggest')
