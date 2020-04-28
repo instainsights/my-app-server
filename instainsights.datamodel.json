@@ -1,0 +1,79 @@
+# InstaInsight Data Model
+{
+    "instainsights.datamodel": {
+      "Opportunity": {
+        "Id": {},
+        "CreatedBy": {},
+        "ModifiedBy": {},
+        "AccountName": {},
+        "Description": {},
+        "Probability": {},
+        "Stage": {}
+      },
+      "Lead": {
+        "Id": {},
+        "CreatedBy": {},
+        "ModifiedBy": {},
+        "Campaign": {},
+        "Address": {},
+        "City": {},
+        "Company": {}
+      },
+      "Account": {
+        "Id": {},
+        "address": {},
+        "CreatedBy": {},
+        "ModifiedBy": {},
+        "ParentAccount": {},
+        "Phone": {},
+        "Fax": {}
+      },
+      "Contact": {
+        "id": {},
+        "CreatedBy": {},
+        "ModifiedBy": {},
+        "AccountName": {},
+        "Email": {},
+        "Description": {},
+        "FirstName": {},
+        "LastName": {}
+      },
+      "Campaign": {
+        "id": {},
+        "CreatedBy": {},
+        "ModifiedBy": {},
+        "Active": {},
+        "CampaignName": {},
+        "OpportunitiesInCampaign": {}
+      },
+      "Case": {
+        "id": {},
+        "CreatedBy": {},
+        "ModifiedBy": {},
+        "AccountName": {},
+        "CaseNumber": {},
+        "ContactEmail": {},
+        "ContactName": {}
+      },
+      "User": {
+        "id": {},
+        "CreatedBy": {},
+        "ModifiedBy": {}
+      },
+      "Contract": {
+        "id": {},
+        "CreatedBy": {},
+        "ModifiedBy": {}
+      },
+      "Report": {
+        "id": {},
+        "CreatedBy": {},
+        "ModifiedBy": {}
+      },
+      "Dashboard": {
+        "id": {},
+        "CreatedBy": {},
+        "ModifiedBy": {}
+      }
+    }
+  }
