@@ -1,8 +1,9 @@
-CustomElementRegistry fs = require('fs');
-const express = require('express')
+import fs from 'fs' 
+import express from 'express'
 const app = express()
 const port = 3001
 const file = 'datamodel.json'
+const jsonDataModel
 
 app.post('/api/suggest', (req, res) => {
 	console.log(`Parameters: ${req.query.q}`)
@@ -21,10 +22,10 @@ app.post('/api/suggest2', (req, res) => {
 		 console.log(suggestions)
 		let reader = new FileReader()
 		reader.readAsText(file) // 
-		let jsonDataModel = JSON.stringify(reader)
+	    jsonDataModel = JSON.stringify(reader)
 		let newString = userInput.newString().toLowerCase()
-		suggestions = parseInput(newString)
-		res.send(suggestions)
+		let tokens = tokenizeInput(newString)
+		res.send(parseTokens(tokens))
 	}
 	})
 
@@ -35,49 +36,56 @@ app.use(function (req, res, next) {
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 
-function parseInputAndTokenize(userInput) {
-	const fs.readFile('datamodel.json)')
-	let newString = userInput.newString().toLowerCase()
-	let token = ' '
-	tokenizedString = newString.split(token)  // thisis now an array
-	// now make a new array/class that classifies each tokern
-	for (int i=0; i<tokenizedString.length; i++) {
-	}
-	// recursive descent parser goes here
-}
+let tokens = new String()
 
-let suggestion = new String()
+function tokenizeInput(userInputArray) {
 
-function parseInput(userInputArray, index) {
-
-	if (entity(userInputArray[index] == '<Entity>') {
-		suggestion =+ ' <Entity> '
-		index++
-		return parseInput(userInputArray, index)
-	} else if (field(userInputArray[index] == '<Field>') {
-		suggestion =+ ' <Field> '
-		index ++
-		return parseInput(userInputArray, index)
+	if (entity(userInputArray[0] == '<Entity>')) {
+		tokens += '<Entity>'
+		// map that this to structure
+		return tokenizeInput(userInputArray.shift())
+	} else if (field(userInputArray[0] == '<Field>')) {
+		tokens += '<Field>'
+		return tokenizeInput(userInputArray.shift())
 	} else {
-		suggestion =+ ' <EOF> '
+		tokens += '<EOF>'
 	} 
-	return suggestion;
+	return tokens;
 }
-// need a datstructure so I can match what I am seeing on each token 
-// with what I belive it to be 
+
  function entity(token) {
-	if ((token == jsonDataModel.Opportunity) ||
-		(token == jsonDataModel.Account) ||
-		(token == jsonDataModel.Lead) ||
-		(token == jsonDataModel.Contact)) {
+	if ((token == jsonDataModel.model.entity.Opportunity) ||
+		(token == jsonDataModel.model.entity.Account) ||
+		(token == jsonDataModel.model.entity.Lead) ||
+		(token == jsonDataModel.model.entityContact)) {
 			return '<Entity>'
 	}
 }
 
 function field(token) {
-	if ((token == jsonDataModel.Id) ||
-	(token == jsonDataModel.CreatedBy) ||
-	(token == jsonDataModel.ModifiedBy)) {
+	if ((token == jsonDataModel.model.entity.field.Id) ||
+	(token == jsonDataModel.model.entity.field.City) ||
+	(token == jsonDataModel.model.entity.field.CreatedBy) ||
+	(token == jsonDataModel.model.entity.field.ModifiedBy)) {
 		return '<Field>'
 	}
+}
+
+function parseTokens(tokens) {
+
+// super restrictive rules.
+switch(tokens)
+{
+	case '<Entity><EOF>':
+		return "Account";
+
+	case '<Entity><EOF>':
+		return "City";
+
+	case '<Entity><Field>':
+		return "Opportunity City";
+	
+	case '<Field><Enity>':
+		return "City Opportunity"
+}
 }
