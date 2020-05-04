@@ -2,7 +2,7 @@ import fs from 'fs'
 import express from 'express'
 const app = express()
 const port = 3001
-const file = 'datamodel.json'
+const file = 'instainsights.datamodel.json'
 const jsonDataModel
 
 app.post('/api/suggest', (req, res) => {
@@ -19,11 +19,11 @@ app.post('/api/suggest2', (req, res) => {
 	if (req.query.q === null ) {
         	res.send('Invalid query')
 	} else {
-		 console.log(suggestions)
+		//console.log(suggestions)
 		let reader = new FileReader()
 		reader.readAsText(file) // 
 	    jsonDataModel = JSON.stringify(reader)
-		let newString = userInput.newString().toLowerCase()
+		let newString = (req.query.q).newString().toLowerCase()
 		let tokens = tokenizeInput(newString)
 		res.send(parseTokens(tokens))
 	}
