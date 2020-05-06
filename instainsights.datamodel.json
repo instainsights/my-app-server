@@ -20,6 +20,15 @@
           "AccountName": {},
           "Description": {}
         }
+      },
+      "Case": {
+        "Fields": {
+          "Id": {},
+          "CreatedBy": {},
+          "ModifiedBy": {},
+          "AccountName": {},
+          "Description": {}
+        }
       }
     }
   }
