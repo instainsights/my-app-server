@@ -83,10 +83,10 @@ switch(tokens)
 	case '<Entity><EOF>':
 		return "City";
 
-	case '<Entity><Field>':
+	case '<Entity><Field><EOF>':
 		return "Opportunity City";
 	
-	case '<Field><Enity>':
+	case '<Field><Enity><EOF>':
 		return "City Opportunity"
 }
 }
