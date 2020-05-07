@@ -1,33 +1,33 @@
 {
   "datamodel": {
-    "Entities": {
-      "Opportunity": {
-        "Fields": {
-          "Id": {},
-          "CreatedBy": {},
-          "ModifiedBy": {},
-          "AccountName": {},
-          "Description": {},
-          "Probability": {},
-          "Stage": {}
+    "entities": {
+      "opportunity": {
+        "fields": {
+          "id": {},
+          "createdBy": {},
+          "modifiedBy": {},
+          "accountName": {},
+          "description": {},
+          "probability": {},
+          "stage": {}
         }
       },
-      "Account": {
-        "Fields": {
-          "Id": {},
-          "CreatedBy": {},
-          "ModifiedBy": {},
-          "AccountName": {},
-          "Description": {}
+      "account": {
+        "fields": {
+          "id": {},
+          "createdBy": {},
+          "modifiedBy": {},
+          "accountName": {},
+          "description": {}
         }
       },
-      "Case": {
-        "Fields": {
-          "Id": {},
-          "CreatedBy": {},
-          "ModifiedBy": {},
-          "AccountName": {},
-          "Description": {}
+      "case": {
+        "fields": {
+          "id": {},
+          "createdBy": {},
+          "modifiedBy": {},
+          "accountName": {},
+          "description": {}
         }
       }
     }

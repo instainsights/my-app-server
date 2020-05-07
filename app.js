@@ -7,9 +7,9 @@ const args = require('minimist')(process.argv.slice(2));
 const app = express()
 const port = 3001
 
-logArray('Parameters: ', args)
+const datamodelFile = fs.readFileSync(args.f)
 
-const jsonDataModel = JSON.parse(fs.readFileSync(args.f))
+//const jsonDataModel = JSON.parse(fs.readFileSync(args.f))
 
 app.post('/api/suggest', (req, res) => {
 	//console.log(`Parameters: ${req.query.q}`)
@@ -25,7 +25,8 @@ app.post('/api/suggest2', (req, res) => {
 	if (req.query.q === null ) {
         	res.send('Invalid query')
 	} else {
-		let tokens = tokenizeInput(req.query.q.toLowerCase().split(' '))
+		let tokens = classifyInput(req.query.q.toLowerCase().split(' '))
+		console.log('Tokens '+ tokens)
 		res.send(parseTokens(tokens))
 	}
 	})
@@ -37,46 +38,63 @@ app.use(function (req, res, next) {
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 
-let tokens = new String()
+let cTokens = ''
 
-function tokenizeInput(userInputArray) {
-	console.log(userInputArray)
-	console.log(userInputArray[0])
-	console.log(tokens)
-	if (entity(userInputArray[0] == '<Entity>')) {
-		tokens += '<Entity>'
-		// map that this to structure
-		userInputArray.shift()
-		return tokenizeInput(userInputArray)
-	} else if (field(userInputArray[0] == '<Field>')) {
-		tokens += '<Field>'
-		userInputArray.shift()
-		return tokenizeInput(userInputArray)
-	} else if (userInputArray.length == 0) {
-		tokens += '<EOF>'
+function classifyInput(tokens) {
+
+	if (tokens.length == 0) {
+		cTokens = cTokens + '<EOF>'
+		return cTokens;
+	} else if (entity(tokens[0])) { 
+		cTokens = cTokens + '<Entity>'
+		tokens.shift()
+		return classifyInput(tokens)
+	} else if (field(tokens[0] == '<Field>')) {
+		cTokens = cTokens + '<Field>'
+		tokens.shift()
+		return classifyInput(tokens)
 	} else {
-		userInputArray.shift()
-		return tokenizeInput(userInputArray)
+		if (tokens.length != 1) {
+			tokens.shift()
+		}
+		return classifyInput(tokens)
 	} 
-	return tokens;
+	return cTokens;
 }
 
- function entity(token) {
-	if ((token == JSON.stringify(jsonDataModel.datamodel.Entities.Opportunity)) ||
-		(token == jsonDataModel.datamodel.Entities.Account) ||
-		(token == jsonDataModel.datamodel.Entities.Lead) ||
-		(token == jsonDataModel.datamodel.Entities.Contact)) {
-			return '<Entity>'
-	}
+function searchKey(obj, key) {
+	return Object.keys(obj).reduce((finalObj, objKey) => {
+		if (objKey !== key) {
+			return searchKey(obj[objKey]);
+		} else {
+			return finalObj = obj[objKey];
+		}
+	}, [])
+}
+
+function entity(token) {
+	entity = JSON.parse(datamodelFile, function(key, value) {
+		console.log("found entity")
+		if (key == token) return true
+	})
+	
+	return false
 }
 
 function field(token) {
+	entity = JSON.parse(datamodelFile, function(key, value) {
+		console.log("found field")
+		if (key == token) return true
+	})
+	return false
+	/*
 	if ((token == jsonDataModel.datamodel.Entities.Opportunity.Fields.Id) ||
 	(token == jsonDataModel.datamodel.Entities.Opportunity.Fields.City) ||
 	(token == jsonDataModel.datamodel.Entities.Opportunity.Fields.CreatedBy) ||
 	(token == jsonDataModel.datamodel.Entities.Opportunity.Fields.ModifiedBy)) {
 		return '<Field>'
 	}
+	*/
 }
 
 function parseTokens(tokens) {
