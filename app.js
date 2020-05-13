@@ -2,10 +2,10 @@
 var fs = require('fs')
 var express = require('express')
 const args = require('minimist')(process.argv.slice(2));
-
-
+const debug = true
 const app = express()
 const port = 3001
+let cTokens = ''
 
 const datamodelFile = fs.readFileSync(args.f)
 
@@ -25,9 +25,10 @@ app.post('/api/suggest2', (req, res) => {
 	if (req.query.q === null ) {
         	res.send('Invalid query')
 	} else {
-		let tokens = classifyInput(req.query.q.toLowerCase().split(' '))
-		console.log('Tokens '+ tokens)
-		res.send(parseTokens(tokens))
+		query = req.query.q.toLowerCase().split(' ')
+		classifyInput(query)
+		console.log('cTokens : '+ cTokens)
+		res.send(parseTokens())
 	}
 	})
 
@@ -38,68 +39,46 @@ app.use(function (req, res, next) {
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 
-let cTokens = ''
 
 function classifyInput(tokens) {
 
 	if (tokens.length == 0) {
-		cTokens = cTokens + '<EOF>'
-		return cTokens;
-	} else if (entity(tokens[0])) { 
-		cTokens = cTokens + '<Entity>'
-		tokens.shift()
-		return classifyInput(tokens)
-	} else if (field(tokens[0] == '<Field>')) {
-		cTokens = cTokens + '<Field>'
+		cTokens += '<EOF>'
+		//return cTokens;
+	} else if (isEntityOrField(tokens[0])) { 
 		tokens.shift()
 		return classifyInput(tokens)
 	} else {
-		if (tokens.length != 1) {
-			tokens.shift()
-		}
+		tokens.shift()
 		return classifyInput(tokens)
-	} 
-	return cTokens;
-}
-
-function searchKey(obj, key) {
-	return Object.keys(obj).reduce((finalObj, objKey) => {
-		if (objKey !== key) {
-			return searchKey(obj[objKey]);
-		} else {
-			return finalObj = obj[objKey];
-		}
-	}, [])
-}
-
-function entity(token) {
-	entity = JSON.parse(datamodelFile, function(key, value) {
-		console.log("found entity")
-		if (key == token) return true
-	})
-	
-	return false
-}
-
-function field(token) {
-	entity = JSON.parse(datamodelFile, function(key, value) {
-		console.log("found field")
-		if (key == token) return true
-	})
-	return false
-	/*
-	if ((token == jsonDataModel.datamodel.Entities.Opportunity.Fields.Id) ||
-	(token == jsonDataModel.datamodel.Entities.Opportunity.Fields.City) ||
-	(token == jsonDataModel.datamodel.Entities.Opportunity.Fields.CreatedBy) ||
-	(token == jsonDataModel.datamodel.Entities.Opportunity.Fields.ModifiedBy)) {
-		return '<Field>'
 	}
-	*/
 }
 
-function parseTokens(tokens) {
+function isEntityOrField(token) {
+	// move this to a const
+	cur_entity = JSON.parse(datamodelFile, function(key, value) {
+		if (key == token) {
+			switch (key) {
+				case 'opportunity':
+				case 'case':
+				case 'account':
+					cTokens += '<Entity>'
+				break
+				case 'id':
+				case 'createdby':
+				case 'city':
+					cTokens += '<Field>'
+				break
+			}
+			return new String(value)
+		}
+		return value
+	})
+}
+
+function parseTokens() {
 	// super restrictive rules.
-	switch(tokens)
+	switch(cTokens)
 	{
 		case '<Entity><EOF>':
 			return "Account";
