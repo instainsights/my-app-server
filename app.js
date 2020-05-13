@@ -29,6 +29,7 @@ app.post('/api/suggest2', (req, res) => {
 		classifyInput(query)
 		console.log('cTokens : '+ cTokens)
 		res.send(parseTokens())
+		cTokens = ''
 	}
 	})
 
@@ -44,7 +45,6 @@ function classifyInput(tokens) {
 
 	if (tokens.length == 0) {
 		cTokens += '<EOF>'
-		//return cTokens;
 	} else if (isEntityOrField(tokens[0])) { 
 		tokens.shift()
 		return classifyInput(tokens)
@@ -64,15 +64,19 @@ function isEntityOrField(token) {
 				case 'account':
 					cTokens += '<Entity>'
 				break
+				// %TODO% Worth noting that this logic isn't good 
+				// enough to catch the absolute value of the key, so repeating 
+				// keys with the same will trip up this logic.  Ok for demo however.
 				case 'id':
 				case 'createdby':
+				case 'modifiedFiedby':
 				case 'city':
 					cTokens += '<Field>'
 				break
 			}
 			return new String(value)
 		}
-		return value
+		//return value
 	})
 }
 
@@ -83,7 +87,7 @@ function parseTokens() {
 		case '<Entity><EOF>':
 			return "Account";
 
-		case '<Entity><EOF>':
+		case '<Field><EOF>':
 			return "City";
 
 		case '<Entity><Field><EOF>':

@@ -14,20 +14,20 @@
       },
       "account": {
         "fields": {
-          "id": {},
-          "createdBy": {},
-          "modifiedBy": {},
-          "accountName": {},
-          "description": {}
+          "id1": {},
+          "createdBy1": {},
+          "modifiedBy1": {},
+          "accountName1": {},
+          "description1": {}
         }
       },
       "case": {
         "fields": {
-          "id": {},
-          "createdBy": {},
-          "modifiedBy": {},
-          "accountName": {},
-          "description": {}
+          "id2": {},
+          "createdBy2": {},
+          "modifiedBy2": {},
+          "accountName2": {},
+          "description2": {}
         }
       }
     }
