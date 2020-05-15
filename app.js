@@ -28,7 +28,7 @@ app.post('/api/suggest2', (req, res) => {
 		query = req.query.q.toLowerCase().split(' ')
 		classifyInput(query)
 		console.log('cTokens : '+ cTokens)
-		res.setHeader('Access-Control-Allow-Origin', '*')
+		res.setHeader('Access-Control-Allow-Origin', '*') // avoid CORS issues
 		res.send(parseTokens())
 		cTokens = ''
 	}

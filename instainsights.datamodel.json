@@ -4,9 +4,9 @@
       "opportunity": {
         "fields": {
           "id": {},
-          "createdBy": {},
-          "modifiedBy": {},
-          "accountName": {},
+          "createdby": {},
+          "modifiedby": {},
+          "accountname": {},
           "description": {},
           "probability": {},
           "stage": {}
@@ -15,18 +15,19 @@
       "account": {
         "fields": {
           "id1": {},
-          "createdBy1": {},
-          "modifiedBy1": {},
-          "accountName1": {},
+          "createdby1": {},
+          "city": {},
+          "modifiedby1": {},
+          "accountname1": {},
           "description1": {}
         }
       },
       "case": {
         "fields": {
           "id2": {},
-          "createdBy2": {},
-          "modifiedBy2": {},
-          "accountName2": {},
+          "createdby2": {},
+          "modifiedby2": {},
+          "accountname2": {},
           "description2": {}
         }
       }
